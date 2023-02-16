@@ -21,16 +21,22 @@ def connectToOBS(args):
     loop.run_until_complete(OBSConnect())
 
 async def OBSConnect():
-    await ws.connect()
-    await ws.wait_until_identified()
-    print("OBS Connect")
+    try:
+        await ws.connect()
+        await ws.wait_until_identified()
+        print("OBS Connected")
+    except:
+        print("*** OBS Server is not active ***")
 
 def disconnectFromOBS(args):
     loop.run_until_complete(OBSDisconnect())
 
 async def OBSDisconnect():
-    await ws.connect()
-    print("OBS Disconnect")
+    try:
+        await ws.connect()
+        print("OBS Disconnected")
+    except:
+        print("Unable to disconnect from OBS server")
     
 async def OBSRecord(recMode):  
     if recMode == '1':
@@ -42,7 +48,7 @@ async def OBSRecord(recMode):
 
 async def OBSScene(Scene_Select):
     await ws.emit(simpleobsws.Request('SetCurrentProgramScene', { 'sceneName': Scene_Select }))
-
+    
 def registerHandlers(args):
     if 'registerFn' in args:
         for effect in obsdiscover():
