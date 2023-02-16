@@ -3,7 +3,7 @@
  
  ### Install
  
-Place the plugin folder in the plugins directory
+Place the OBS_Websocks folder in the rotorhazrd plugins directory
  
 Run the requirements install in the directory using the following command
  
