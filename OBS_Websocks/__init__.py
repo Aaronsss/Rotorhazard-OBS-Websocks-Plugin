@@ -2,7 +2,7 @@
 
 OBS_IP = 'localhost'
 OBS_Port = '4455'
-OBS_Password = 'e9YV9eIj2IoZA2Oc'
+OBS_Password = ''
 
 import logging
 logger = logging.getLogger(__name__)
