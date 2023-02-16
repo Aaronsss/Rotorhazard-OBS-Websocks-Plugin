@@ -1,0 +1,3 @@
+simpleobsws==1.3.*
+asyncio==3.4.*
+asyncio-gevent==0.2.*
