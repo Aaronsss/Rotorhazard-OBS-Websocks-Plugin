@@ -1,5 +1,5 @@
 # OBS_Websocks
- OBS websocks plugin for Rotorhazard
+ OBS websocks plugin for Rotorhazard to allow changing scenes and setting recordings based on rotorhazard timer events
  
  ### Install
  
