@@ -24,7 +24,10 @@ async def OBSConnect():
     try:
         await ws.connect()
         await ws.wait_until_identified()
-        print("OBS Connected")
+        if simpleobsws.WebSocketClient.is_identified(ws):
+            print("OBS Connected")
+        else:
+            print("*** OBS Server is not active ***")
     except:
         print("*** OBS Server is not active ***")
 
@@ -47,7 +50,8 @@ async def OBSRecord(recMode):
         await ws.emit(simpleobsws.Request('ToggleRecord'))
 
 async def OBSScene(Scene_Select):
-    await ws.emit(simpleobsws.Request('SetCurrentProgramScene', { 'sceneName': Scene_Select }))
+    if Scene_Select != '':
+        await ws.emit(simpleobsws.Request('SetCurrentProgramScene', { 'sceneName': Scene_Select }))
     
 def registerHandlers(args):
     if 'registerFn' in args:
@@ -62,13 +66,28 @@ def initialize(**kwargs):
         
 def obsMessageEffect(action, args):
 
-    OBS_scene = action['scene']
-    OBS_record = action['record']
+    try:
+        OBS_scene = action['scene']
+    except:
+        OBS_scene = ''
+    try:
+        OBS_record = action['record']
+    except:
+        OBS_record = 0
+    try:
+        OBS_Connect = action['connect']
+    except:
+        OBS_Connect = 0
 
-    loop.run_until_complete(OBSScene(OBS_scene))
-    loop.run_until_complete(OBSRecord(OBS_record))
+    is_identified = simpleobsws.WebSocketClient.is_identified(ws)
 
-    logger.debug("OBS scene changed to: {}, recording: {}". format(OBS_scene, OBS_record))
+    if OBS_Connect != '0' and not is_identified:
+        loop.run_until_complete(OBSConnect())
+
+    if is_identified:
+        loop.run_until_complete(OBSScene(OBS_scene))
+        loop.run_until_complete(OBSRecord(OBS_record))
+        logger.debug("OBS scene changed to: {}, recording: {}". format(OBS_scene, OBS_record))
 
 def obsdiscover():
     return [
@@ -85,6 +104,11 @@ def obsdiscover():
                 {
                     'id': 'record',
                     'name': 'OBS Record (0 - no change, 1 - record, 2 - stop, 3 - restart)',
+                    'type': 'text',
+                },                
+                {
+                    'id': 'connect',
+                    'name': 'OBS Connect (Try to connet to OBS)',
                     'type': 'text',
                 }
             ]
