@@ -27,7 +27,7 @@ async def OBSConnect():
         if simpleobsws.WebSocketClient.is_identified(ws):
             print("OBS Connected")
         else:
-            print("*** OBS Server is not active ***")
+            print("*** OBS failed to connect ***")
     except:
         print("*** OBS Server is not active ***")
 
@@ -36,18 +36,17 @@ def disconnectFromOBS(args):
 
 async def OBSDisconnect():
     try:
-        await ws.connect()
-        print("OBS Disconnected")
+        if simpleobsws.WebSocketClient.is_identified(ws):
+            await ws.disconnect()
+            print("OBS Disconnected")
     except:
-        print("Unable to disconnect from OBS server")
+        pass
     
 async def OBSRecord(recMode):  
     if recMode == '1':
         await ws.emit(simpleobsws.Request('StartRecord'))
     elif recMode == '2':
         await ws.emit(simpleobsws.Request('StopRecord'))
-    elif recMode == '3':
-        await ws.emit(simpleobsws.Request('ToggleRecord'))
 
 async def OBSScene(Scene_Select):
     if Scene_Select != '':
@@ -81,7 +80,8 @@ def obsMessageEffect(action, args):
 
     is_identified = simpleobsws.WebSocketClient.is_identified(ws)
 
-    if OBS_Connect != '0' and not is_identified:
+    if (OBS_Connect != '0' and OBS_Connect != '') and not is_identified:
+        print("OBS trying to connect...")
         loop.run_until_complete(OBSConnect())
 
     if is_identified:
@@ -103,7 +103,7 @@ def obsdiscover():
                 },
                 {
                     'id': 'record',
-                    'name': 'OBS Record (0 - no change, 1 - record, 2 - stop, 3 - restart)',
+                    'name': 'OBS Record (0 - no change, 1 - record, 2 - stop)',
                     'type': 'text',
                 },                
                 {
