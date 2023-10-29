@@ -86,12 +86,19 @@ class OBS_Actions():
         if 'register_fn' in args:
             for effect in [
                 ActionEffect(
-                    'OBS Action',
+                    'OBS Actions',
                     self.obsMessageEffect,
                     [
                         UIField('scene', "OBS Scene", UIFieldType.TEXT),
-                        UIField('record', "OBS Record (0 - no change, 1 - record, 2 - stop)", UIFieldType.TEXT),
-                        UIField('connect', "OBS Connect (Try to connet to OBS)", UIFieldType.TEXT)
+                        UIField('record', "OBS Record", UIFieldType.SELECT, options=[
+                            UIFieldSelectOption(0, "No change"),
+                            UIFieldSelectOption(1, "Start recording"),
+                            UIFieldSelectOption(2, "Stop recording"),
+                        ], value=0),
+                        UIField('connect', "OBS Connect", UIFieldType.SELECT, options=[
+                            UIFieldSelectOption(0, "No action"),
+                            UIFieldSelectOption(1, "Connect to OBS if not already connected"),
+                        ], value=0),
                     ]
                 )
             ]:
