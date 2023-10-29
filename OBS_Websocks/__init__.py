@@ -51,6 +51,7 @@ class OBS_Actions():
         self._rhapi = rhapi
 
     def connectToOBS(self, args):
+        self.OBS_IP = self._rhapi.db.option("obs_IP", "localhost")
         self.OBS_Port = self._rhapi.db.option("obs_port", "4455")
         self.OBS_Password = self._rhapi.db.option("obs_password", )
         print ("OBS_IP:", self.OBS_IP, "OBS_Port:", self.OBS_Port, "OBS_Password:", self.OBS_Password)
