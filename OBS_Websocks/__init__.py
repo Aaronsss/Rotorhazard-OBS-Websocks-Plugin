@@ -15,7 +15,7 @@ import asyncio_gevent
 
 asyncio.set_event_loop_policy(asyncio_gevent.EventLoopPolicy())
 loop = asyncio.get_event_loop()
-ws = simpleobsws.WebSocketClient(url = 'ws://' + OBS_IP + ':' + OBS_Port, password = OBS_Password)
+ws = simpleobsws.WebSocketClient(url = 'ws://' + OBS_IP + ':' + str(OBS_Port), password = OBS_Password)
 
 async def OBSConnect():
     try:
@@ -51,6 +51,9 @@ class OBS_Actions():
         self._rhapi = rhapi
 
     def connectToOBS(self, args):
+        self.OBS_Port = self._rhapi.db.option("obs_port", "4455")
+        self.OBS_Password = self._rhapi.db.option("obs_password", )
+        print ("OBS_IP:", self.OBS_IP, "OBS_Port:", self.OBS_Port, "OBS_Password:", self.OBS_Password)
         loop.run_until_complete(OBSConnect())
 
     def disconnectFromOBS(self, args):
@@ -109,4 +112,12 @@ def initialize(rhapi):
     rhapi.events.on(Evt.STARTUP, obs.connectToOBS)
     rhapi.events.on(Evt.SHUTDOWN, obs.disconnectFromOBS)
     rhapi.events.on(Evt.ACTIONS_INITIALIZE, obs.register_handlers)
+
+    rhapi.ui.register_panel('obs_options', 'OBS Actions', 'settings', order=0)
+
+    rhapi.fields.register_option(UIField('obs_IP', 'OBS IP', UIFieldType.TEXT, 'localhost'), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_port', 'Port', UIFieldType.BASIC_INT, 4455), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_password', 'Password', UIFieldType.PASSWORD), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_connect_at_boot', 'Connect at timer startup', UIFieldType.CHECKBOX, 1), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_disconnect_at_shutdown', 'Disconnect at timer shutdown', UIFieldType.CHECKBOX, 1), 'obs_options')
   
