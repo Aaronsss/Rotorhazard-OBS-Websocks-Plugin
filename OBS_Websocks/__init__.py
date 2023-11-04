@@ -10,7 +10,7 @@ import asyncio_gevent
 
 OBSSettingFile = "./plugins/OBS_Websocks/settings.txt"
 
-# work around for database not being setup at this point
+# work around for database not being setup at this point, not database variable are not used for connection
 try:
     file = open(OBSSettingFile) 
     SettingsFileContents = file.readlines() 
