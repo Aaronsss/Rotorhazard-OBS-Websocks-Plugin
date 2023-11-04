@@ -1,9 +1,4 @@
 '''OBS Actions'''
-
-OBS_IP = 'localhost'
-OBS_Port = '4455'
-OBS_Password = ''
-
 import logging
 logger = logging.getLogger(__name__)
 from eventmanager import Evt
@@ -13,9 +8,26 @@ import simpleobsws
 import asyncio
 import asyncio_gevent
 
+OBSSettingFile = "./plugins/OBS_Websocks/settings.txt"
+
+# work around for database not being setup at this point, not database variable are not used for connection
+try:
+    file = open(OBSSettingFile) 
+    SettingsFileContents = file.readlines() 
+    file.close()
+    OBS_IP = str(SettingsFileContents[0][:-1])
+    OBS_Port = str(SettingsFileContents[1][:-1])
+    OBS_Password = str(SettingsFileContents[2][:-1])
+    OBS_Enabled = str(SettingsFileContents[3][:-1])
+except:
+    OBS_IP = 'localhost'
+    OBS_Port = '4455'
+    OBS_Password = ''
+    OBS_Enabled = '0'
+
 asyncio.set_event_loop_policy(asyncio_gevent.EventLoopPolicy())
 loop = asyncio.get_event_loop()
-ws = simpleobsws.WebSocketClient(url = 'ws://' + OBS_IP + ':' + OBS_Port, password = OBS_Password)
+ws = simpleobsws.WebSocketClient(url = 'ws://' + OBS_IP + ':' + str(OBS_Port), password = OBS_Password)
 
 async def OBSConnect():
     try:
@@ -50,7 +62,23 @@ class OBS_Actions():
     def __init__(self, rhapi):
         self._rhapi = rhapi
 
+    def setSettings(self, args):
+        OBS_IP = self._rhapi.db.option("obs_IP")
+        OBS_Port = str(self._rhapi.db.option("obs_port"))
+        OBS_Password = self._rhapi.db.option("obs_password")
+        OBS_Enabled = str(self._rhapi.db.option("obs_enabled"))
+        f = open(OBSSettingFile, "w")
+        file_Contents = OBS_IP + "\n" + OBS_Port + "\n" + OBS_Password + "\n" + OBS_Enabled + "\n"
+        f.write(file_Contents)
+        f.close()
+        print("OBS Websocks settings file created with the following settings:", file_Contents)
+
     def connectToOBS(self, args):
+        OBS_IP = self._rhapi.db.option("obs_IP", "localhost")
+        OBS_Port = self._rhapi.db.option("obs_port", "4455")
+        OBS_Password = self._rhapi.db.option("obs_password", "")
+        OBS_Enabled = str(self._rhapi.db.option("obs_enabled", "0"))
+        print ("OBS_IP:", OBS_IP, "OBS_Port:", OBS_Port, "OBS_Password:", OBS_Password, "OBS Enabled:", OBS_Enabled)
         loop.run_until_complete(OBSConnect())
 
     def disconnectFromOBS(self, args):
@@ -109,4 +137,11 @@ def initialize(rhapi):
     rhapi.events.on(Evt.STARTUP, obs.connectToOBS)
     rhapi.events.on(Evt.SHUTDOWN, obs.disconnectFromOBS)
     rhapi.events.on(Evt.ACTIONS_INITIALIZE, obs.register_handlers)
+
+    rhapi.ui.register_panel('obs_options', 'OBS Actions', 'settings', order=0)
+    rhapi.fields.register_option(UIField('obs_IP', 'OBS IP', UIFieldType.TEXT, 'localhost'), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_port', 'Port', UIFieldType.BASIC_INT, 4455), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_password', 'Password', UIFieldType.PASSWORD), 'obs_options')
+    #rhapi.fields.register_option(UIField('obs_enabled', 'Connect at timer startup', UIFieldType.CHECKBOX, 0), 'obs_options')
+    rhapi.ui.register_quickbutton('obs_options', 'generate_connectin_file', 'Save Connection Settings', obs.setSettings)
   
