@@ -48,15 +48,27 @@ async def OBSDisconnect():
     except:
         pass
     
-async def OBSRecord(recMode):  
-    if recMode == '1':
-        await ws.emit(simpleobsws.Request('StartRecord'))
-    elif recMode == '2':
-        await ws.emit(simpleobsws.Request('StopRecord'))
+async def OBSChange(Scene_Select, recMode):  
+    is_identified = simpleobsws.WebSocketClient.is_identified(ws)
 
-async def OBSScene(Scene_Select):
-    if Scene_Select != '':
-        await ws.emit(simpleobsws.Request('SetCurrentProgramScene', { 'sceneName': Scene_Select }))
+    if not is_identified:
+        try:
+            await ws.connect()
+            await ws.wait_until_identified()
+        except:
+            pass
+    is_identified = simpleobsws.WebSocketClient.is_identified(ws)
+
+    try:
+        if is_identified:
+            if Scene_Select != '':
+                await ws.emit(simpleobsws.Request('SetCurrentProgramScene', { 'sceneName': Scene_Select }))
+            if recMode == '1':
+                await ws.emit(simpleobsws.Request('StartRecord'))
+            elif recMode == '2':
+                await ws.emit(simpleobsws.Request('StopRecord'))
+    except:
+        pass
 
 class OBS_Actions():
     def __init__(self, rhapi):
@@ -74,7 +86,6 @@ class OBS_Actions():
         logger.info("OBS Websocks settings file created")
 
     def connectToOBS(self, args):
-        #logger.debug("OBS_IP:", OBS_IP, "OBS_Port:", OBS_Port, "OBS_Password:", OBS_Password, "OBS Enabled:", OBS_Enabled)
         try:
             loop.run_until_complete(OBSConnect())
         except:
@@ -87,7 +98,6 @@ class OBS_Actions():
             pass
     
     def obsMessageEffect(self, action, args):
-
         try:
             OBS_scene = action['scene']
         except:
@@ -96,24 +106,12 @@ class OBS_Actions():
             OBS_record = action['record']
         except:
             OBS_record = 0
-        try:
-            OBS_Connect = action['connect']
-        except:
-            OBS_Connect = 0
 
-        is_identified = simpleobsws.WebSocketClient.is_identified(ws)
+        OBS_Enabled = str(self._rhapi.db.option("obs_enabled"))
 
-        if (OBS_Connect != '0' and OBS_Connect != '') and not is_identified:
-            print("OBS trying to connect...")
+        if OBS_Enabled == '1':
             try:
-                loop.run_until_complete(OBSConnect())
-            except:
-                logger.debug("OBS connection loop already running")
-
-        if is_identified:
-            try:
-                loop.run_until_complete(OBSScene(OBS_scene))
-                loop.run_until_complete(OBSRecord(OBS_record))
+                loop.run_until_complete(OBSChange(OBS_scene, OBS_record))
                 logger.debug("OBS scene changed to: {}, recording: {}". format(OBS_scene, OBS_record))
             except:
                 logger.debug("Unable to change scene")
@@ -131,10 +129,6 @@ class OBS_Actions():
                             UIFieldSelectOption(1, "Start recording"),
                             UIFieldSelectOption(2, "Stop recording"),
                         ], value=0),
-                        UIField('connect', "OBS Connect", UIFieldType.SELECT, options=[
-                            UIFieldSelectOption(0, "No action"),
-                            UIFieldSelectOption(1, "Connect to OBS if not already connected"),
-                        ], value=0),
                     ]
                 )
             ]:
@@ -150,7 +144,7 @@ def initialize(rhapi):
     rhapi.fields.register_option(UIField('obs_IP', 'OBS IP', UIFieldType.TEXT), 'obs_options')
     rhapi.fields.register_option(UIField('obs_port', 'Port', UIFieldType.BASIC_INT), 'obs_options')
     rhapi.fields.register_option(UIField('obs_password', 'Password', UIFieldType.PASSWORD), 'obs_options')
-    #rhapi.fields.register_option(UIField('obs_enabled', 'Connect at timer startup', UIFieldType.CHECKBOX), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_enabled', 'Enable OBS Actions', UIFieldType.CHECKBOX), 'obs_options')
     rhapi.ui.register_quickbutton('obs_options', 'generate_connectin_file', 'Save Connection Settings', obs.setSettings)
     rhapi.ui.register_quickbutton('obs_options', 'connect_to_obs', 'Connect to OBS Server', obs.connectToOBS)
     rhapi.ui.register_quickbutton('obs_options', 'disconnect_from_obs', 'Disconnect from OBS Server', obs.disconnectFromOBS)
