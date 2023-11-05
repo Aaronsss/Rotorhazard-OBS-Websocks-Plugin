@@ -79,16 +79,10 @@ class OBS_Actions():
         OBS_Password = self._rhapi.db.option("obs_password", "")
         OBS_Enabled = str(self._rhapi.db.option("obs_enabled", "0"))
         print ("OBS_IP:", OBS_IP, "OBS_Port:", OBS_Port, "OBS_Password:", OBS_Password, "OBS Enabled:", OBS_Enabled)
-        try:
-            loop.run_until_complete(OBSConnect())
-        except:
-            pass
+        loop.run_until_complete(OBSConnect())
 
     def disconnectFromOBS(self, args):
-        try:
-            loop.run_until_complete(OBSDisconnect())
-        except:
-            pass
+        loop.run_until_complete(OBSDisconnect())
     
     def obsMessageEffect(self, action, args):
 
@@ -109,18 +103,12 @@ class OBS_Actions():
 
         if (OBS_Connect != '0' and OBS_Connect != '') and not is_identified:
             print("OBS trying to connect...")
-            try:
-                loop.run_until_complete(OBSConnect())
-            except:
-                logger.debug("OBS connection loop already running")
+            loop.run_until_complete(OBSConnect())
 
         if is_identified:
-            try:
-                loop.run_until_complete(OBSScene(OBS_scene))
-                loop.run_until_complete(OBSRecord(OBS_record))
-                logger.debug("OBS scene changed to: {}, recording: {}". format(OBS_scene, OBS_record))
-            except:
-                logger.debug("Unable to change scene")
+            loop.run_until_complete(OBSScene(OBS_scene))
+            loop.run_until_complete(OBSRecord(OBS_record))
+            logger.debug("OBS scene changed to: {}, recording: {}". format(OBS_scene, OBS_record))
 
     def register_handlers(self, args):
         if 'register_fn' in args:
@@ -154,6 +142,6 @@ def initialize(rhapi):
     rhapi.fields.register_option(UIField('obs_IP', 'OBS IP', UIFieldType.TEXT, 'localhost'), 'obs_options')
     rhapi.fields.register_option(UIField('obs_port', 'Port', UIFieldType.BASIC_INT, 4455), 'obs_options')
     rhapi.fields.register_option(UIField('obs_password', 'Password', UIFieldType.PASSWORD), 'obs_options')
-    #rhapi.fields.register_option(UIField('obs_enabled', 'Connect at timer startup', UIFieldType.CHECKBOX), 'obs_options')
+    #rhapi.fields.register_option(UIField('obs_enabled', 'Connect at timer startup', UIFieldType.CHECKBOX, 0), 'obs_options')
     rhapi.ui.register_quickbutton('obs_options', 'generate_connectin_file', 'Save Connection Settings', obs.setSettings)
   
