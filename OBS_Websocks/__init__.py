@@ -74,11 +74,7 @@ class OBS_Actions():
         logger.info("OBS Websocks settings file created")
 
     def connectToOBS(self, args):
-        OBS_IP = self._rhapi.db.option("obs_IP", "localhost")
-        OBS_Port = self._rhapi.db.option("obs_port", "4455")
-        OBS_Password = self._rhapi.db.option("obs_password", "")
-        OBS_Enabled = str(self._rhapi.db.option("obs_enabled", "0"))
-        logger.debug("OBS_IP:", OBS_IP, "OBS_Port:", OBS_Port, "OBS_Password:", OBS_Password, "OBS Enabled:", OBS_Enabled)
+        #logger.debug("OBS_IP:", OBS_IP, "OBS_Port:", OBS_Port, "OBS_Password:", OBS_Password, "OBS Enabled:", OBS_Enabled)
         try:
             loop.run_until_complete(OBSConnect())
         except:
@@ -151,9 +147,12 @@ def initialize(rhapi):
     rhapi.events.on(Evt.ACTIONS_INITIALIZE, obs.register_handlers)
 
     rhapi.ui.register_panel('obs_options', 'OBS Actions', 'settings', order=0)
-    rhapi.fields.register_option(UIField('obs_IP', 'OBS IP', UIFieldType.TEXT, 'localhost'), 'obs_options')
-    rhapi.fields.register_option(UIField('obs_port', 'Port', UIFieldType.BASIC_INT, 4455), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_IP', 'OBS IP', UIFieldType.TEXT), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_port', 'Port', UIFieldType.BASIC_INT), 'obs_options')
     rhapi.fields.register_option(UIField('obs_password', 'Password', UIFieldType.PASSWORD), 'obs_options')
     #rhapi.fields.register_option(UIField('obs_enabled', 'Connect at timer startup', UIFieldType.CHECKBOX), 'obs_options')
     rhapi.ui.register_quickbutton('obs_options', 'generate_connectin_file', 'Save Connection Settings', obs.setSettings)
+    rhapi.ui.register_quickbutton('obs_options', 'connect_to_obs', 'Connect to OBS Server', obs.connectToOBS)
+    rhapi.ui.register_quickbutton('obs_options', 'disconnect_from_obs', 'Disconnect from OBS Server', obs.disconnectFromOBS)
+
   
