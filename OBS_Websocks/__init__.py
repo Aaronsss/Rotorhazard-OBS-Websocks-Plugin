@@ -34,17 +34,17 @@ async def OBSConnect():
         await ws.connect()
         await ws.wait_until_identified()
         if simpleobsws.WebSocketClient.is_identified(ws):
-            print("OBS Connected")
+            logger.debug("OBS Connected")
         else:
-            print("*** OBS failed to connect ***")
+            logger.info("*** OBS failed to connect ***")
     except:
-        print("*** OBS Server is not active ***")
+        logger.info("*** OBS Server is not active ***")
 
 async def OBSDisconnect():
     try:
         if simpleobsws.WebSocketClient.is_identified(ws):
             await ws.disconnect()
-            print("OBS Disconnected")
+            logger.info("OBS Disconnected")
     except:
         pass
     
@@ -71,14 +71,14 @@ class OBS_Actions():
         file_Contents = OBS_IP + "\n" + OBS_Port + "\n" + OBS_Password + "\n" + OBS_Enabled + "\n"
         f.write(file_Contents)
         f.close()
-        print("OBS Websocks settings file created with the following settings:", file_Contents)
+        logger.info("OBS Websocks settings file created")
 
     def connectToOBS(self, args):
         OBS_IP = self._rhapi.db.option("obs_IP", "localhost")
         OBS_Port = self._rhapi.db.option("obs_port", "4455")
         OBS_Password = self._rhapi.db.option("obs_password", "")
         OBS_Enabled = str(self._rhapi.db.option("obs_enabled", "0"))
-        print ("OBS_IP:", OBS_IP, "OBS_Port:", OBS_Port, "OBS_Password:", OBS_Password, "OBS Enabled:", OBS_Enabled)
+        logger.debug("OBS_IP:", OBS_IP, "OBS_Port:", OBS_Port, "OBS_Password:", OBS_Password, "OBS Enabled:", OBS_Enabled)
         try:
             loop.run_until_complete(OBSConnect())
         except:
