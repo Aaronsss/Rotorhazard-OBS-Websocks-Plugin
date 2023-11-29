@@ -34,9 +34,7 @@ deactivate
 sudo systemctl restart rotorhazard.service
 ```
 
-On the Settings page in RotorHazard you will see OBS actions section, expand this and complete the details to connect to OBS websocks, make sure you click the Save Connection Settings button when done. You will also need to restart RotorHazard for the settings to take effect.
-
-Once restarted you will be able to setup OBS messages in the Event Actions section of the settings page to be performed on certain timer events 
+On the Settings page in RotorHazard you will see OBS actions section, you will need to complete this section before you can use the plugin
 
 1. You will need to find the IP or .local name of your OBS PC
 2. Enter the port and password which can be found / set in OBS tools -> OBS Websocket Server Settings. 
@@ -45,6 +43,8 @@ Once restarted you will be able to setup OBS messages in the Event Actions secti
 5. When the server has rebooted it should connect automatically to OBS and OBS will give you a pop up saying it has connected
 6. You may connect or disconnect from OBS using the buttons
 ![image](https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin/assets/23297034/65ff31ea-5713-428c-9ab8-16c74cbe8ae2)
+
+Once restarted you will be able to setup OBS messages in the Event Actions section of the settings page to be performed on certain timer events 
 
 The event actions page will show the following. 
 1. Select the event you wish to use to trigger the OBS scene change. 
