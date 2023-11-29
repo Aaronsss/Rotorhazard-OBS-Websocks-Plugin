@@ -6,7 +6,7 @@ This plugin allows for the automation of recordings and scene changes in OBS bas
  
 Make sure you have OBS running and have the OBS websock plugin installed. OBS websocket is included by default in OBS > 28.0.0 but the repository can be found here if you need it: https://github.com/obsproject/obs-websocket
 
-Log in via SSH and then execute the following commands if you have a venv folder is ~/RotorHazard/src/server/venv
+Log in via SSH and then execute the following commands
 
 ```
 cd ~
