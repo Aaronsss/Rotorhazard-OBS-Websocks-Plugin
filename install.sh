@@ -4,12 +4,12 @@ mv ~/Rotorhazard-OBS-Websocks-Plugin-main/OBS_Websocks/ ~/RotorHazard/src/server
 # Do this if the user installed using the old venv setup
 cd ~
 if [ -d "./RotorHazard/src/server/venv/" ]; then
-    source ./RotorHazard/src/server/venv/bin/activate
+    alias activate="./RotorHazard/src/server/venv/bin/activate"
 fi
 
 # Do this if the user is using the latest venv setup
 if [ -d "./venv/" ]; then
-    source ./venv/bin/activate
+    alias activate="./venv/bin/activate"
 fi
 
 pip install -r ./RotorHazard/src/server/plugins/OBS_Websocks/requirements.txt
