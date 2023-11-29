@@ -13,10 +13,10 @@ cd ~
 wget https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin/archive/refs/heads/main.zip
 unzip ./main.zip
 mv ~/Rotorhazard-OBS-Websocks-Plugin-main/OBS_Websocks/ ~/RotorHazard/src/server/plugins/
+rm -R ./Rotorhazard-OBS-Websocks-Plugin-main/
+rm ./main.zip
 pip install -r ./RotorHazard/src/server/plugins/OBS_Websocks/requirements.txt
 sudo systemctl restart rotorhazard.service
-rm -R ./Rotorhazard-OBS-Websocks-Plugin-main/OBS_Websocks/
-rm ./main.zip
 ```
 
 
@@ -26,12 +26,12 @@ cd ~
 wget https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin/archive/refs/heads/main.zip
 unzip ./main.zip
 mv ~/Rotorhazard-OBS-Websocks-Plugin-main/OBS_Websocks/ ~/RotorHazard/src/server/plugins/
+rm -R ./Rotorhazard-OBS-Websocks-Plugin-main/
+rm ./main.zip
 source ./RotorHazard/src/server/venv/bin/activate
 pip install -r ./RotorHazard/src/server/plugins/OBS_Websocks/requirements.txt
 deactivate
 sudo systemctl restart rotorhazard.service
-rm -R ./Rotorhazard-OBS-Websocks-Plugin-main/OBS_Websocks/
-rm ./main.zip
 ```
 
 On the Settings page in RotorHazard you will see OBS actions section, expand this and complete the details to connect to OBS websocks, make sure you click the Save Connection Settings button when done. You will also need to restart RotorHazard for the settings to take effect.
