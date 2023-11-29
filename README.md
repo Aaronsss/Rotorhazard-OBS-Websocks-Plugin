@@ -38,16 +38,16 @@ On the Settings page in RotorHazard you will see OBS actions section, expand thi
 
 Once restarted you will be able to setup OBS messages in the Event Actions section of the settings page to be performed on certain timer events 
 
-You will need to find the IP or .local name of your OBS PC
-Enter the port and password which can be found / set in OBS tools -> OBS Websocket Server Settings. 
-Tick the enable OBS actions box to enable or disable the OBS plugin
-Lastly click save connection settings and reboot rotorhazard / the raspberry pi
-When the server has rebooted it should connect automatically to OBS and OBS will give you a pop up saying it has connected
-You may connect or disconnect from OBS using the buttons
+1. You will need to find the IP or .local name of your OBS PC
+2. Enter the port and password which can be found / set in OBS tools -> OBS Websocket Server Settings. 
+3. Tick the enable OBS actions box to enable or disable the OBS plugin
+4. Lastly click save connection settings and reboot rotorhazard / the raspberry pi
+5. When the server has rebooted it should connect automatically to OBS and OBS will give you a pop up saying it has connected
+6. You may connect or disconnect from OBS using the buttons
 ![image](https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin/assets/23297034/65ff31ea-5713-428c-9ab8-16c74cbe8ae2)
 
 The event actions page will show the following. 
-Select the event you wish to use to trigger the OBS scene change. 
-You will then need to type in the exact name of the scene that you want to change to in OBS. 
-Lastly select what you want the recording to do from the drop down
+1. Select the event you wish to use to trigger the OBS scene change. 
+2. You will then need to type in the exact name of the scene that you want to change to in OBS. 
+3. Lastly select what you want the recording to do from the drop down
 ![image](https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin/assets/23297034/da39fb4d-994b-46ab-a178-d5ce56d2c294)
