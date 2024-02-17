@@ -154,3 +154,4 @@ cython_debug/
 # Rotorhazard Plugins
 RH_*/
 event_actions_udp/
+README.md
