@@ -7,6 +7,7 @@ from RHUI import UIField, UIFieldType, UIFieldSelectOption
 import simpleobsws
 import asyncio
 import asyncio_gevent
+import datetime
 
 OBSSettingFile = "./plugins/OBS_Websocks/settings.txt"
 
@@ -48,7 +49,7 @@ async def OBSDisconnect():
     except:
         pass
     
-async def OBSChange(Scene_Select, recMode):  
+async def OBSChange(Scene_Select, recMode, directory):  
     is_identified = simpleobsws.WebSocketClient.is_identified(ws)
 
     if not is_identified:
@@ -64,7 +65,11 @@ async def OBSChange(Scene_Select, recMode):
             if Scene_Select != '':
                 await ws.emit(simpleobsws.Request('SetCurrentProgramScene', { 'sceneName': Scene_Select }))
             if recMode == '1':
+                if directory != '':
+                    await ws.call(simpleobsws.Request('SetRecordDirectory', { 'recordDirectory': directory }))
                 await ws.emit(simpleobsws.Request('StartRecord'))
+                ret = await ws.call(simpleobsws.Request('GetRecordDirectory')) # Perform the request
+                print("Response data: {}".format(ret.responseData))
             elif recMode == '2':
                 await ws.emit(simpleobsws.Request('StopRecord'))
     except:
@@ -90,6 +95,7 @@ class OBS_Actions():
             loop.run_until_complete(OBSConnect())
         except:
             pass
+        #print(datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S") + " Round " + str(self._rhapi.db.heat_max_round(self._rhapi.race.heat) + 1) + " Heat " + str(self._rhapi.race.heat))
 
     def disconnectFromOBS(self, args):
         try:
@@ -108,10 +114,13 @@ class OBS_Actions():
             OBS_record = 0
 
         OBS_Enabled = str(self._rhapi.db.option("obs_enabled"))
+        OBS_directory = str(self._rhapi.db.option("obs_directory"))
+        if OBS_directory != '':
+            OBS_directory = OBS_directory + "/" + str(self._rhapi.db.option("eventName")) + "/" + str(self._rhapi.race.heat)
 
         if OBS_Enabled == '1':
             try:
-                loop.run_until_complete(OBSChange(OBS_scene, OBS_record))
+                loop.run_until_complete(OBSChange(OBS_scene, OBS_record, OBS_directory))
                 logger.debug("OBS scene changed to: {}, recording: {}". format(OBS_scene, OBS_record))
             except:
                 logger.debug("Unable to change scene")
@@ -145,6 +154,7 @@ def initialize(rhapi):
     rhapi.fields.register_option(UIField('obs_port', 'Port', UIFieldType.BASIC_INT), 'obs_options')
     rhapi.fields.register_option(UIField('obs_password', 'Password', UIFieldType.PASSWORD), 'obs_options')
     rhapi.fields.register_option(UIField('obs_enabled', 'Enable OBS Actions', UIFieldType.CHECKBOX), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_directory', 'Base Record Directoy', UIFieldType.TEXT), 'obs_options')
     rhapi.ui.register_quickbutton('obs_options', 'generate_connectin_file', 'Save Connection Settings', obs.setSettings)
     rhapi.ui.register_quickbutton('obs_options', 'connect_to_obs', 'Connect to OBS Server', obs.connectToOBS)
     rhapi.ui.register_quickbutton('obs_options', 'disconnect_from_obs', 'Disconnect from OBS Server', obs.disconnectFromOBS)
