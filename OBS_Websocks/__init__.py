@@ -7,6 +7,7 @@ from RHUI import UIField, UIFieldType, UIFieldSelectOption
 import simpleobsws
 import asyncio
 import asyncio_gevent
+import datetime
 
 OBSSettingFile = "./plugins/OBS_Websocks/settings.txt"
 
@@ -48,7 +49,7 @@ async def OBSDisconnect():
     except:
         pass
     
-async def OBSChange(Scene_Select, recMode):  
+async def OBSChange(Scene_Select, recMode, directory):  
     is_identified = simpleobsws.WebSocketClient.is_identified(ws)
 
     if not is_identified:
@@ -64,6 +65,7 @@ async def OBSChange(Scene_Select, recMode):
             if Scene_Select != '':
                 await ws.emit(simpleobsws.Request('SetCurrentProgramScene', { 'sceneName': Scene_Select }))
             if recMode == '1':
+                await ws.emit(simpleobsws.Request('SetRecordDirectory', { 'recordDirectory': 'D:/obs_test' }))
                 await ws.emit(simpleobsws.Request('StartRecord'))
             elif recMode == '2':
                 await ws.emit(simpleobsws.Request('StopRecord'))
@@ -90,6 +92,14 @@ class OBS_Actions():
             loop.run_until_complete(OBSConnect())
         except:
             pass
+        print("Event name: " + self._rhapi.db.option("eventName"))
+        print(simpleobsws.Request('SetRecordDirectory'))
+
+        current_heat = self._rhapi.race.heat
+        #current_heat_name = current_heat.name
+
+
+
 
     def disconnectFromOBS(self, args):
         try:
@@ -133,6 +143,13 @@ class OBS_Actions():
                 )
             ]:
                 args['register_fn'](effect)
+
+    def test_call(self, args):
+        print("TESTING")
+        #print(self._rhapi.race.heat)
+        #print(self._rhapi.db.heat_max_round(1))
+        
+        print(datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S") + " Round " + str(self._rhapi.db.heat_max_round(self._rhapi.race.heat) + 1) + " Heat " + str(self._rhapi.race.heat))
 
 def initialize(rhapi):
     obs = OBS_Actions(rhapi)
