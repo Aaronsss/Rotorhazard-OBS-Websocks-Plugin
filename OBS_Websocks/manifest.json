@@ -1,0 +1,13 @@
+{
+    "name": "OBS Websocks",
+    "author": "Aaron Smith",
+    "author_uri": "https://github.com/Aaronsss/",
+    "description": "Connect to OBS to change scenes and set recordings",
+    "info_uri": "https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin",
+    "license": "RotorHazard",
+    "license_uri": "https://github.com/RotorHazard/RotorHazard/blob/main/LICENSE",
+    "version": "1.0",
+    "required_rhapi_version": "1.0",
+    "update_uri": null,
+    "text_domain": null
+}
