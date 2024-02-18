@@ -155,3 +155,4 @@ cython_debug/
 RH_*/
 event_actions_udp/
 README.md
+OBS_Websocks/settings.txt
