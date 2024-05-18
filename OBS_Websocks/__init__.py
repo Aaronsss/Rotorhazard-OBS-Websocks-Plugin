@@ -142,7 +142,7 @@ def initialize(rhapi):
 
     rhapi.ui.register_panel('obs_options', 'OBS Actions', 'settings', order=0)
     rhapi.fields.register_option(UIField('obs_IP', 'OBS IP', UIFieldType.TEXT), 'obs_options')
-    rhapi.fields.register_option(UIField('obs_port', 'Port', UIFieldType.BASIC_INT), 'obs_options')
+    rhapi.fields.register_option(UIField('obs_port', 'Port', UIFieldType.TEXT), 'obs_options')
     rhapi.fields.register_option(UIField('obs_password', 'Password', UIFieldType.PASSWORD), 'obs_options')
     rhapi.fields.register_option(UIField('obs_enabled', 'Enable OBS Actions', UIFieldType.CHECKBOX), 'obs_options')
     rhapi.ui.register_quickbutton('obs_options', 'generate_connectin_file', 'Save Connection Settings', obs.setSettings)
