@@ -57,18 +57,39 @@ async def OBSChange(Scene_Select, recMode):
             await ws.wait_until_identified()
         except:
             pass
-    is_identified = simpleobsws.WebSocketClient.is_identified(ws)
+        finally:
+            is_identified = simpleobsws.WebSocketClient.is_identified(ws)
 
+    if not is_identified:
+        return
+    
+    calls:list[simpleobsws.Request] = []
+    if Scene_Select != '':
+        calls.append(simpleobsws.Request('SetCurrentProgramScene', { 'sceneName': Scene_Select }))
+    if recMode == '1':
+        calls.append(simpleobsws.Request('StartRecord'))
+    elif recMode == '2':
+        calls.append(simpleobsws.Request('StopRecord'))
+
+    retries:list[simpleobsws.Request] = []
     try:
-        if is_identified:
-            if Scene_Select != '':
-                await ws.emit(simpleobsws.Request('SetCurrentProgramScene', { 'sceneName': Scene_Select }))
-            if recMode == '1':
-                await ws.emit(simpleobsws.Request('StartRecord'))
-            elif recMode == '2':
-                await ws.emit(simpleobsws.Request('StopRecord'))
-    except:
-        pass
+        responses:list[simpleobsws.RequestResponse] = await ws.call_batch(requests=calls, 
+                                                                        halt_on_failure=False, 
+                                                                        execution_type=simpleobsws.RequestBatchExecutionType.SerialFrame)
+    
+    except simpleobsws.MessageTimeout:
+        retries = calls
+
+    else:
+        for index, response in enumerate(responses):
+            if response.requestStatus.code != 100:
+                retries.append(calls[index])
+
+    finally:
+        if retries:
+            await ws.emit_batch(requests=retries, 
+                                halt_on_failure=False, 
+                                execution_type=simpleobsws.RequestBatchExecutionType.SerialFrame)
 
 class OBS_Actions():
     def __init__(self, rhapi):
