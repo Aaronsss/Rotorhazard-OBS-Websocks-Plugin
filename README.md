@@ -51,3 +51,15 @@ The event actions page will show the following.
 2. You will then need to type in the exact name of the scene that you want to change to in OBS. 
 3. Lastly select what you want the recording to do from the drop down
 ![image](https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin/assets/23297034/da39fb4d-994b-46ab-a178-d5ce56d2c294)
+
+### Troubleshooting
+If you are unable to connect / the log file says the server is not active try the following:
+1. Check OBS is running 
+2. Confirm the OBS websocket server options has Enable OBS Websocket server selected within the OBS software
+3. Confirm your credentials match those in the OBS websockets server update them and click save connection info
+4. Try disabling your PC's firewall. If your firewall it set to public it may be blocking the connection.
+5. Update to the latest version of this plugin
+
+You will need to reboot rotorhazard after each of the above steps
+
+If you suspect the requirements.txt has not installed correctly you can type pip list in the ssh console and check the requirements.txt depenancies and versions have been installed
