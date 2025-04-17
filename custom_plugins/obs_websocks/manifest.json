@@ -1,0 +1,12 @@
+{
+    "domain": "obs_websocks",
+    "name": "OBS Websocks",
+    "author": "Aaron Smith",
+    "license": "MIT",
+    "description": "Connect to OBS to change scenes and set recordings",
+    "info_uri": "https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin",
+    "required_rhapi_version": "1.1",
+    "version": "1.3.0",
+	"dependencies" : ["simpleobsws==1.4.*","asyncio==3.4.*","git+https://github.com/Aaronsss/asyncio-gevent@patch-1"],
+    "category": ["Utilities"]
+  }
