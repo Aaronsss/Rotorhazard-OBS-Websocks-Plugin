@@ -6,33 +6,40 @@ This plugin allows for the automation of recordings and scene changes in OBS bas
  
 Make sure you have OBS running and have the OBS websock plugin installed. OBS websocket is included by default in OBS > 28.0.0 but the repository can be found here if you need it: https://github.com/obsproject/obs-websocket
 
-Log in via SSH and then execute the following commands
+There are 3 ways you can install this plugin
+1. Though RotorHazards community plugin manager on RotorHazard 4.3.0 or greater:  
+   This can be found on your timer which must be connected to the internet by going to settings -> plugins -> Browse Community Plugins (online only) -> Utilities then install the Settings Restore plugin  
+
+2. Log in via SSH and then execute the following commands
 
 ```
 cd ~
 wget https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin/archive/refs/heads/main.zip
 unzip ./main.zip
-mv ~/Rotorhazard-OBS-Websocks-Plugin-main/OBS_Websocks/ ~/RotorHazard/src/server/plugins/
+mv ~/Rotorhazard-OBS-Websocks-Plugin-main/custom_plugins/obs_websocks/ ~/RotorHazard/src/server/plugins/
 rm -R ./Rotorhazard-OBS-Websocks-Plugin-main/
 rm ./main.zip
-pip install -r ./RotorHazard/src/server/plugins/OBS_Websocks/requirements.txt
+pip install -r ./RotorHazard/src/server/plugins/obs_websocks/requirements.txt
 sudo systemctl restart rotorhazard.service
 ```
 
 
-if the above doesn't work or you have the following folder on your pi ~/RotorHazard/src/server/venv run the following commands
+3. if the above doesn't work or you have the following folder on your pi ~/RotorHazard/src/server/venv run the following commands
 ```
 cd ~
 wget https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin/archive/refs/heads/main.zip
 unzip ./main.zip
-mv ~/Rotorhazard-OBS-Websocks-Plugin-main/OBS_Websocks/ ~/RotorHazard/src/server/plugins/
+mv ~/Rotorhazard-OBS-Websocks-Plugin-main/custom_plugins/obs_websocks/ ~/RotorHazard/src/server/plugins/
 rm -R ./Rotorhazard-OBS-Websocks-Plugin-main/
 rm ./main.zip
 source ./RotorHazard/src/server/venv/bin/activate
-pip install -r ./RotorHazard/src/server/plugins/OBS_Websocks/requirements.txt
+pip install -r ./RotorHazard/src/server/plugins/obs_websocks/requirements.txt
 deactivate
 sudo systemctl restart rotorhazard.service
 ```
+
+4. Manually:  
+  If you wish to install manually, place the custom_plugins/db_restore folder within the RotorHazard plugins folder Rotorhazard/src/server/plugins then start / restart the server  
 
 On the Settings page in RotorHazard you will see OBS actions section, you will need to complete this section before you can use the plugin
 
