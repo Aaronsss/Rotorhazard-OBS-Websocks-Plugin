@@ -8,7 +8,7 @@ Make sure you have OBS running and have the OBS websock plugin installed. OBS we
 
 There are 3 ways you can install this plugin
 1. Though RotorHazards community plugin manager on RotorHazard 4.3.0 or greater:  
-   This can be found on your timer which must be connected to the internet by going to settings -> plugins -> Browse Community Plugins (online only) -> Utilities then install the Settings Restore plugin  
+   This can be found on your timer which must be connected to the internet by going to settings -> plugins -> Browse Community Plugins (online only) -> Streaming & Overlays then install the OBS Websocks plugin  
 
 2. Log in via SSH and then execute the following commands
 
@@ -39,7 +39,7 @@ sudo systemctl restart rotorhazard.service
 ```
 
 4. Manually:  
-  If you wish to install manually, place the custom_plugins/db_restore folder within the RotorHazard plugins folder Rotorhazard/src/server/plugins then start / restart the server  
+  If you wish to install manually, place the custom_plugins/obs_websocks folder within the RotorHazard plugins folder Rotorhazard/src/server/plugins then start / restart the server  
 
 On the Settings page in RotorHazard you will see OBS actions section, you will need to complete this section before you can use the plugin
 
