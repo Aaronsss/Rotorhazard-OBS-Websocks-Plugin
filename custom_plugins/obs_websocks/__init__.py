@@ -7,8 +7,17 @@ from RHUI import UIField, UIFieldType, UIFieldSelectOption
 import simpleobsws
 import asyncio
 import asyncio_gevent
+import os
 
-OBSSettingFile = "./plugins/OBS_Websocks/settings.txt"
+# determine data location
+DATA_DIR = None
+
+if os.path.isdir(os.path.expanduser("~/rh-data")):
+    DATA_DIR = os.path.expanduser("~/rh-data")
+elif os.path.isdir("./plugins"):
+    DATA_DIR = "."
+
+OBSSettingFile = DATA_DIR + "/plugins/OBS_Websocks/settings.txt"
 
 # work around for database not being setup at this point, not database variable are not used for connection
 try:
