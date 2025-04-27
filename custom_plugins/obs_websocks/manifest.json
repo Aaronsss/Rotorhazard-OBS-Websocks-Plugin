@@ -6,7 +6,7 @@
 	"description": "Connect to OBS to change scenes and set recordings",
 	"documentation_uri": "https://github.com/Aaronsss/Rotorhazard-OBS-Websocks-Plugin",
 	"required_rhapi_version": "1.1",
-	"version": "1.4.0",
+	"version": "1.5.0",
 	"dependencies" : ["simpleobsws==1.4.*","asyncio==3.4.*","git+https://github.com/Aaronsss/asyncio-gevent@patch-1"],
 	"category": ["Streaming & Overlays"]
   }
