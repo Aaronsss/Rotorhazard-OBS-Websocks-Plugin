@@ -17,7 +17,7 @@ if os.path.isdir(os.path.expanduser("~/rh-data")):
 elif os.path.isdir("./plugins"):
     DATA_DIR = "."
 
-OBSSettingFile = DATA_DIR + "/plugins/OBS_Websocks/settings.txt"
+OBSSettingFile = DATA_DIR + "/plugins/obs_websocks/settings.txt"
 
 # work around for database not being setup at this point, not database variable are not used for connection
 try:
